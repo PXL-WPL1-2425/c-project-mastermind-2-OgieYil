@@ -78,6 +78,9 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
                 ComboBox4.SelectedItem != null ? ComboBox4.SelectedItem.ToString() : "default"
             };
 
+            string feedback = GenerateFeedback(userCode);
+            LogAttempt(userCode, feedback);
+
             CheckColor(Label1, userCode[0], 0);
             CheckColor(Label2, userCode[1], 1);
             CheckColor(Label3, userCode[2], 2);
@@ -98,6 +101,32 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
                 MessageBox.Show($"Game Over! De code was: {string.Join(", ", generatedCode)}", "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetGame();
             }
+        }
+
+        private string GenerateFeedback(string[] userCode)
+        {
+            int correctPosition = 0;
+            int correctColorWrongPosition = 0;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (userCode[i] == generatedCode[i])
+                {
+                    correctPosition++;
+                }
+                else if (generatedCode.Contains(userCode[i]))
+                {
+                    correctColorWrongPosition++;
+                }
+            }
+
+            return $"Rood: {correctPosition}, Wit: {correctColorWrongPosition}";
+        }
+
+        private void LogAttempt(string[] userCode, string feedback)
+        {
+            string attempt = $"Poging: {string.Join(", ", userCode)} | Feedback: {feedback}";
+            AttemptsListBox.Items.Add(attempt);
         }
 
         private void CheckColor(Label label, string selectedColor, int position)
@@ -126,7 +155,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             attemptsLeft = 10;
             UpdateTitle();
 
-            // Clear ComboBoxes and Labels
+            // Clear ComboBoxes, Labels, and Attempts ListBox
             ComboBox1.SelectedItem = null;
             ComboBox2.SelectedItem = null;
             ComboBox3.SelectedItem = null;
@@ -141,6 +170,8 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             Label2.Background = Brushes.LightGray;
             Label3.Background = Brushes.LightGray;
             Label4.Background = Brushes.LightGray;
+
+            AttemptsListBox.Items.Clear();
         }
     }
 }
