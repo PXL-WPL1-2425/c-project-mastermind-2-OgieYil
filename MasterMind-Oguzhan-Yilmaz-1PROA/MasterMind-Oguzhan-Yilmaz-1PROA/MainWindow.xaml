@@ -30,5 +30,7 @@
 
         <!-- ListBox to display attempts -->
         <ListBox x:Name="AttemptsListBox" Width="400" Height="150" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="66,0,0,52" />
+        
+        
     </Grid>
 </Window>

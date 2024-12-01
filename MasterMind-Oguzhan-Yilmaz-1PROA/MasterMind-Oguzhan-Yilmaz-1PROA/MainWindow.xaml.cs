@@ -225,5 +225,27 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             AttemptsListBox.Items.Clear();
             ScoreLabel.Content = "Score: 0 Strafpunten | Totale strafpunten: 0";
         }
+
+        // Handle the window closing event
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            MessageBoxResult result = MessageBox.Show(
+                "Wilt u het spel vroegtijdig beëindigen?",
+                "Beëindigen?",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;  // Cancel the closing event if the user clicks 'No'
+            }
+            else
+            {
+                Application.Current.Shutdown();  // Allow the app to close if the user clicks 'Yes'
+            }
+        }
     }
 }
