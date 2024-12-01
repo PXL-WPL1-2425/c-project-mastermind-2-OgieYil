@@ -1,0 +1,32 @@
+﻿<Window x:Class="Mastermind_PE_Oguzhan_Yilmaz_1PROA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Mastermind" Height="450" Width="800" Background="Cyan" >
+
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,50,0,0">
+            <StackPanel>
+                <ComboBox Width="112" Height="40" x:Name="ComboBox1" SelectionChanged="ComboBox_SelectionChanged" />
+                <Label Width="113" Height="40" x:Name="Label1" BorderBrush="Transparent" BorderThickness="0" Background="LightGray" />
+            </StackPanel>
+            <StackPanel>
+                <ComboBox Width="112" Height="40" x:Name="ComboBox2" SelectionChanged="ComboBox_SelectionChanged" />
+                <Label Width="113" Height="40" x:Name="Label2" BorderBrush="Transparent" BorderThickness="0" Background="LightGray" />
+            </StackPanel>
+            <StackPanel>
+                <ComboBox Width="112" Height="40" x:Name="ComboBox3" SelectionChanged="ComboBox_SelectionChanged" />
+                <Label Width="113" Height="40" x:Name="Label3" BorderBrush="Transparent" BorderThickness="0" Background="LightGray" />
+            </StackPanel>
+            <StackPanel>
+                <ComboBox Width="112" Height="40" x:Name="ComboBox4" SelectionChanged="ComboBox_SelectionChanged" />
+                <Label Width="113" Height="40" x:Name="Label4" BorderBrush="Transparent" BorderThickness="0" Background="LightGray" />
+            </StackPanel>
+        </StackPanel>
+
+        <Button Content="Check Code" Width="150" Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,200,0,0" Click="Button_Click" />
+
+    </Grid>
+</Window>
