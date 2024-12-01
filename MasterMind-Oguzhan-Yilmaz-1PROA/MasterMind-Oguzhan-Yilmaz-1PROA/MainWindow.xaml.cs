@@ -238,6 +238,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
                 MessageBoxImage.Question
             );
 
+
             if (result == MessageBoxResult.No)
             {
                 e.Cancel = true;  // Cancel the closing event if the user clicks 'No'
@@ -246,6 +247,9 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             {
                 Application.Current.Shutdown();  // Allow the app to close if the user clicks 'Yes'
             }
+
+
+
         }
     }
 }
