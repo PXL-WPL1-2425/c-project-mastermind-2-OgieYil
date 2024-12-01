@@ -8,8 +8,9 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
 {
     public partial class MainWindow : Window
     {
-        private string[] generatedCode; // The randomly generated code
-        private int attemptsLeft = 10;  // Number of attempts the player has
+        private string[] generatedCode;
+        private int attemptsLeft = 10;
+        private int totalPenaltyPoints = 0; // Track total penalty points
 
         public MainWindow()
         {
@@ -66,7 +67,8 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
         {
             if (attemptsLeft <= 0)
             {
-                MessageBox.Show("Game Over! Je hebt geen pogingen meer.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Game Over! Je hebt geen pogingen meer.\nTotale strafpunten: {totalPenaltyPoints}",
+                                "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetGame();
                 return;
             }
@@ -78,6 +80,9 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
                 ComboBox4.SelectedItem != null ? ComboBox4.SelectedItem.ToString() : "default"
             };
 
+            int score = CalculateScore(userCode);
+            totalPenaltyPoints += score; // Add the score to the total penalty points
+            DisplayScore(score);
             string feedback = GenerateFeedback(userCode);
             LogAttempt(userCode, feedback);
 
@@ -88,19 +93,52 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
 
             if (userCode.SequenceEqual(generatedCode))
             {
-                MessageBox.Show("Gefeliciteerd! Je hebt de code gekraakt!", "Winnaar", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Gefeliciteerd! Je hebt de code gekraakt!\nTotale strafpunten: {totalPenaltyPoints}",
+                                "Winnaar", MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetGame();
                 return;
             }
 
-            attemptsLeft--; // Decrease attempts by 1
-            UpdateTitle(); // Update the title with the remaining attempts
+            attemptsLeft--;
+            UpdateTitle();
 
             if (attemptsLeft == 0)
             {
-                MessageBox.Show($"Game Over! De code was: {string.Join(", ", generatedCode)}", "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Game Over! De code was: {string.Join(", ", generatedCode)}\nTotale strafpunten: {totalPenaltyPoints}",
+                                "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
                 ResetGame();
             }
+        }
+
+        private int CalculateScore(string[] userCode)
+        {
+            int score = 0;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (userCode[i] == generatedCode[i])
+                {
+                    // Correct color and position = 0 points
+                    continue;
+                }
+                else if (generatedCode.Contains(userCode[i]))
+                {
+                    // Correct color, wrong position = 1 point
+                    score += 1;
+                }
+                else
+                {
+                    // Color not in the code = 2 points
+                    score += 2;
+                }
+            }
+
+            return score;
+        }
+
+        private void DisplayScore(int score)
+        {
+            ScoreLabel.Content = $"Score: {score} Strafpunten | Totale strafpunten: {totalPenaltyPoints}";
         }
 
         private string GenerateFeedback(string[] userCode)
@@ -150,12 +188,11 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
 
         private void ResetGame()
         {
-            // Reset the game to play again
             GenerateRandomCode();
             attemptsLeft = 10;
+            totalPenaltyPoints = 0; // Reset total penalty points
             UpdateTitle();
 
-            // Clear ComboBoxes, Labels, and Attempts ListBox
             ComboBox1.SelectedItem = null;
             ComboBox2.SelectedItem = null;
             ComboBox3.SelectedItem = null;
@@ -172,6 +209,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             Label4.Background = Brushes.LightGray;
 
             AttemptsListBox.Items.Clear();
+            ScoreLabel.Content = "Score: 0 Strafpunten | Totale strafpunten: 0";
         }
     }
 }
