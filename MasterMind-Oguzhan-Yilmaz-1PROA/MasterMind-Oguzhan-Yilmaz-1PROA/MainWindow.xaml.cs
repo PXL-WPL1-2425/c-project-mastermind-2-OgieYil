@@ -10,7 +10,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
     {
         private string[] generatedCode;
         private int attemptsLeft = 10;
-        private int totalPenaltyPoints = 0; // Track total penalty points
+        private int totalPenaltyPoints = 0;
 
         public MainWindow()
         {
@@ -67,9 +67,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
         {
             if (attemptsLeft <= 0)
             {
-                MessageBox.Show($"Game Over! Je hebt geen pogingen meer.\nTotale strafpunten: {totalPenaltyPoints}",
-                                "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
-                ResetGame();
+                ShowEndGameMessage(false);
                 return;
             }
 
@@ -81,7 +79,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             };
 
             int score = CalculateScore(userCode);
-            totalPenaltyPoints += score; // Add the score to the total penalty points
+            totalPenaltyPoints += score;
             DisplayScore(score);
             string feedback = GenerateFeedback(userCode);
             LogAttempt(userCode, feedback);
@@ -93,9 +91,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
 
             if (userCode.SequenceEqual(generatedCode))
             {
-                MessageBox.Show($"Gefeliciteerd! Je hebt de code gekraakt!\nTotale strafpunten: {totalPenaltyPoints}",
-                                "Winnaar", MessageBoxButton.OK, MessageBoxImage.Information);
-                ResetGame();
+                ShowEndGameMessage(true);
                 return;
             }
 
@@ -104,9 +100,7 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
 
             if (attemptsLeft == 0)
             {
-                MessageBox.Show($"Game Over! De code was: {string.Join(", ", generatedCode)}\nTotale strafpunten: {totalPenaltyPoints}",
-                                "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
-                ResetGame();
+                ShowEndGameMessage(false);
             }
         }
 
@@ -118,17 +112,14 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             {
                 if (userCode[i] == generatedCode[i])
                 {
-                    // Correct color and position = 0 points
                     continue;
                 }
                 else if (generatedCode.Contains(userCode[i]))
                 {
-                    // Correct color, wrong position = 1 point
                     score += 1;
                 }
                 else
                 {
-                    // Color not in the code = 2 points
                     score += 2;
                 }
             }
@@ -186,11 +177,34 @@ namespace Mastermind_PE_Oguzhan_Yilmaz_1PROA
             }
         }
 
+        private void ShowEndGameMessage(bool isWinner)
+        {
+            string message = isWinner
+                ? $"Gefeliciteerd! Je hebt de code gekraakt!\nTotale strafpunten: {totalPenaltyPoints}"
+                : $"Game Over! De code was: {string.Join(", ", generatedCode)}\nTotale strafpunten: {totalPenaltyPoints}";
+
+            MessageBoxResult result = MessageBox.Show(
+                message + "\nWil je opnieuw spelen?",
+                isWinner ? "Gewonnen!" : "Game Over",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information
+            );
+
+            if (result == MessageBoxResult.Yes)
+            {
+                ResetGame();
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
+        }
+
         private void ResetGame()
         {
             GenerateRandomCode();
             attemptsLeft = 10;
-            totalPenaltyPoints = 0; // Reset total penalty points
+            totalPenaltyPoints = 0;
             UpdateTitle();
 
             ComboBox1.SelectedItem = null;
